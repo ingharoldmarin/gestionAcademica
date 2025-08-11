@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\GenericCrudController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\UserRoleController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -19,6 +20,13 @@ Route::prefix('v1')->group(function () {
         // Users & Roles CRUD
         Route::apiResource('users', UserController::class);
         Route::apiResource('roles', RoleController::class);
+
+        // Admin-only: asignación de roles a usuarios
+        Route::middleware('role:admin')->group(function () {
+            Route::post('users/{user}/roles/sync', [UserRoleController::class, 'sync']);
+            Route::post('users/{user}/roles/attach', [UserRoleController::class, 'attach']);
+            Route::delete('users/{user}/roles/{role}', [UserRoleController::class, 'detach']);
+        });
 
         // Generic CRUD routes for whitelisted resources
         Route::get('{resource}', [GenericCrudController::class, 'index']);

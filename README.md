@@ -157,6 +157,48 @@ Para ejecutar el seed:
 php artisan db:seed
 ```
 
+### Asignación de roles (solo admin)
+
+Rutas protegidas que requieren `Authorization: Bearer {TOKEN}` de un usuario con rol `admin`:
+
+- Reemplazar todos los roles del usuario:
+```bash
+curl -X POST http://127.0.0.1:8000/api/v1/users/1/roles/sync \
+  -H "Authorization: Bearer TOKEN_AQUI" \
+  -H "Content-Type: application/json" \
+  -d '{"roles":[1,2]}'
+```
+
+- Agregar un rol adicional (sin quitar los existentes):
+```bash
+curl -X POST http://127.0.0.1:8000/api/v1/users/1/roles/attach \
+  -H "Authorization: Bearer TOKEN_AQUI" \
+  -H "Content-Type: application/json" \
+  -d '{"role_id":2}'
+```
+
+- Quitar un rol específico:
+```bash
+curl -X DELETE http://127.0.0.1:8000/api/v1/users/1/roles/2 \
+  -H "Authorization: Bearer TOKEN_AQUI"
+```
+
+### Ejemplos de uso (curl)
+
+- Listar usuarios (protegido):
+```bash
+curl -X GET http://127.0.0.1:8000/api/v1/users \
+  -H "Authorization: Bearer TOKEN_AQUI"
+```
+
+- Crear un subject (protegido):
+```bash
+curl -X POST http://127.0.0.1:8000/api/v1/subjects \
+  -H "Authorization: Bearer TOKEN_AQUI" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Matemáticas","description":"Básica"}'
+```
+
 ### Ejemplos de autenticación (curl)
 
 - Login (usuario seed admin):
