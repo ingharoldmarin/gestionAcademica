@@ -157,3 +157,37 @@ Para ejecutar el seed:
 php artisan db:seed
 ```
 
+### Ejemplos de autenticación (curl)
+
+- Login (usuario seed admin):
+```bash
+curl -X POST http://127.0.0.1:8000/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@example.com","password":"password"}'
+```
+
+- Registrar usuario (campos requeridos: first_name, last_name, email, username, password):
+```bash
+curl -X POST http://127.0.0.1:8000/api/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "first_name":"Ana",
+    "last_name":"Pérez",
+    "email":"ana@example.com",
+    "username":"anap",
+    "password":"password"
+  }'
+```
+
+- Usar token para consultar perfil (reemplaza TOKEN_AQUI por el token devuelto por login/register):
+```bash
+curl http://127.0.0.1:8000/api/v1/auth/me \
+  -H "Authorization: Bearer TOKEN_AQUI"
+```
+
+- Logout:
+```bash
+curl -X POST http://127.0.0.1:8000/api/v1/auth/logout \
+  -H "Authorization: Bearer TOKEN_AQUI"
+```
+
