@@ -20,12 +20,22 @@ Base: `/api/v1/{recurso}`
 Excluidos: `schedule` (cronograma) y tablas pivote/intermedias.
 
 ### Autenticación
-Actualmente no requiere autenticación. Puede añadirse middleware si se necesita.
+Los endpoints protegidos requieren token Bearer (Sanctum).
+
+Públicos:
+- POST `/api/v1/auth/register` → registra usuario y devuelve token
+- POST `/api/v1/auth/login` → devuelve token
+
+Protegidos (header `Authorization: Bearer {TOKEN}`):
+- GET `/api/v1/auth/me` → usuario autenticado con roles
+- POST `/api/v1/auth/logout` → invalida el token actual
 
 ### Paginación
 Parámetro opcional `per_page` (1–100). Ejemplo: `GET /api/v1/schools?per_page=20`.
 
 ### Endpoints comunes
+
+Cabeceras para endpoints protegidos: `Authorization: Bearer {TOKEN}`
 
 1) Listar
 ```
@@ -111,4 +121,15 @@ Nota: Campos foráneos se deben proveer con IDs válidos donde apliquen (por eje
 
 ### Cómo extender/limitar recursos
 Editar `App/Http/Controllers/Api/GenericCrudController.php`, constante `RESOURCE_TO_TABLE`.
+
+### Usuarios y Roles (CRUD protegidos)
+
+- Usuarios: `/api/v1/users`
+  - Crear: body JSON con `name`, `email`, `password`, `roles` (array de IDs opcional)
+  - Listar/Ver/Actualizar/Eliminar soportados
+  - Devuelve el usuario con relación `roles`
+
+- Roles: `/api/v1/roles`
+  - Campos: `name`
+  - Listar/Ver/Crear/Actualizar/Eliminar
 
