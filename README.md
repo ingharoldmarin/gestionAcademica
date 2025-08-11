@@ -133,3 +133,27 @@ Editar `App/Http/Controllers/Api/GenericCrudController.php`, constante `RESOURCE
   - Campos: `name`
   - Listar/Ver/Crear/Actualizar/Eliminar
 
+### Roles y permisos (definición funcional)
+
+- admin: acceso total a la API.
+- coordinator: puede ver información, registrar usuarios con rol `student` y `teacher`, y crear cronograma.
+- teacher: puede crear cronograma y ver información.
+- student: solo puede ver información.
+
+Nota: La tabla `schedule` (cronograma) está excluida del CRUD genérico. Su creación/gestión se expone por endpoints específicos (pueden agregarse con reglas de autorización por rol).
+
+### Usuarios de prueba (seed)
+
+Se crearon roles y usuarios iniciales:
+
+- admin@example.com / username: `admin` / password: `password` → rol: `admin`
+- coordinator@example.com / username: `coordinator` / password: `password` → rol: `coordinator`
+- teacher@example.com / username: `teacher` / password: `password` → rol: `teacher`
+- student@example.com / username: `student` / password: `password` → rol: `student`
+
+Para ejecutar el seed:
+
+```bash
+php artisan db:seed
+```
+
